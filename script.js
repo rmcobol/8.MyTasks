@@ -63,29 +63,48 @@ function toggleComplete(id) {
 
 let todos = [];
 let editingId = null;
+let currentFilter = '전체';
 
 const todoListEl = document.querySelector('.todo-list');
 const todoInputEl = document.querySelector('.todo-input');
 const categorySelectEl = document.querySelector('.category-select');
 const addBtnEl = document.querySelector('.add-btn');
+const filterBtnEls = document.querySelectorAll('.filter-btn');
+const progressFillEl = document.querySelector('.progress-fill');
+const progressTextEl = document.querySelector('.progress-text');
 
 function render() {
   todos = loadTodos();
   todoListEl.innerHTML = '';
 
-  if (todos.length === 0) {
+  const filtered =
+    currentFilter === '전체'
+      ? todos
+      : todos.filter((todo) => todo.category === currentFilter);
+
+  if (filtered.length === 0) {
     const emptyEl = document.createElement('li');
     emptyEl.className = 'empty-message';
     emptyEl.textContent = '할 일이 없습니다';
     todoListEl.appendChild(emptyEl);
-    return;
+  } else {
+    filtered.forEach((todo) => {
+      const itemEl =
+        todo.id === editingId ? createEditItem(todo) : createTodoItem(todo);
+      todoListEl.appendChild(itemEl);
+    });
   }
 
-  todos.forEach((todo) => {
-    const itemEl =
-      todo.id === editingId ? createEditItem(todo) : createTodoItem(todo);
-    todoListEl.appendChild(itemEl);
-  });
+  renderProgress();
+}
+
+function renderProgress() {
+  const total = todos.length;
+  const completed = todos.filter((todo) => todo.completed).length;
+  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+  progressFillEl.style.width = `${percent}%`;
+  progressTextEl.textContent = `${completed}/${total} 완료 · ${percent}%`;
 }
 
 function createTodoItem(todo) {
@@ -107,7 +126,7 @@ function createTodoItem(todo) {
   title.textContent = todo.title;
 
   const category = document.createElement('span');
-  category.className = 'category-tag';
+  category.className = `category-tag category-${todo.category}`;
   category.textContent = todo.category;
 
   const editBtn = document.createElement('button');
@@ -192,6 +211,15 @@ function handleAddTodo() {
 addBtnEl.addEventListener('click', handleAddTodo);
 todoInputEl.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') handleAddTodo();
+});
+
+filterBtnEls.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    currentFilter = btn.dataset.filter;
+    filterBtnEls.forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  });
 });
 
 render();

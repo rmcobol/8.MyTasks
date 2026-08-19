@@ -124,6 +124,21 @@ body {
   color: #555;
 }
 
+.category-tag.category-업무 {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.category-tag.category-개인 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.category-tag.category-공부 {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
 .edit-btn,
 .delete-btn,
 .save-btn,

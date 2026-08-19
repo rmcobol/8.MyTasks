@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>할 일 관리 앱</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <!-- 1. 상단: 앱 제목 + 진행률 표시 영역 -->
+    <header class="header">
+      <h1 class="app-title">할 일 관리</h1>
+      <div class="progress-area">
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <span class="progress-text">0 / 0 완료</span>
+      </div>
+    </header>
+
+    <!-- 2. 입력 영역 -->
+    <section class="input-area">
+      <input type="text" class="todo-input" placeholder="할 일을 입력하세요">
+      <select class="category-select">
+        <option value="업무">업무</option>
+        <option value="개인">개인</option>
+        <option value="공부">공부</option>
+      </select>
+      <button type="button" class="add-btn">추가</button>
+    </section>
+
+    <!-- 3. 필터 영역 -->
+    <nav class="filter-area">
+      <button type="button" class="filter-btn active" data-filter="전체">전체</button>
+      <button type="button" class="filter-btn" data-filter="업무">업무</button>
+      <button type="button" class="filter-btn" data-filter="개인">개인</button>
+      <button type="button" class="filter-btn" data-filter="공부">공부</button>
+    </nav>
+
+    <!-- 4. 목록 영역 -->
+    <main class="list-area">
+      <ul class="todo-list"></ul>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

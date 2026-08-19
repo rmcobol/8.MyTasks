@@ -165,3 +165,72 @@ body {
   color: #999;
   padding: 40px 0;
 }
+
+/* 5. 반응형 스타일 */
+@media (max-width: 480px) {
+  .app {
+    max-width: 100%;
+    margin: 0;
+    padding: 16px;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .app-title {
+    font-size: 20px;
+  }
+
+  .input-area {
+    flex-wrap: wrap;
+  }
+
+  .todo-input {
+    flex: 1 1 100%;
+  }
+
+  .category-select {
+    flex: 1;
+  }
+
+  .add-btn {
+    flex: 1;
+  }
+
+  .filter-area {
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .todo-item {
+    flex-wrap: wrap;
+  }
+
+  .todo-title {
+    flex: 1 1 100%;
+    order: 1;
+  }
+
+  .todo-checkbox {
+    order: 0;
+  }
+
+  .category-tag {
+    order: 2;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    order: 3;
+  }
+
+  .todo-item.editing {
+    flex-wrap: wrap;
+  }
+
+  .edit-title-input {
+    flex: 1 1 100%;
+  }
+}

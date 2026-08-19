@@ -1,0 +1,692 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #f5f5f5;
+  --card-bg: #ffffff;
+  --text: #333333;
+  --text-muted: #999999;
+  --border: #eeeeee;
+  --tag-bg: #e0e0e0;
+  --tag-text: #555555;
+  --track: #e0e0e0;
+  --fill: #4caf50;
+  --btn-bg: #f0f0f0;
+  --btn-border: #dddddd;
+  --input-border: #cccccc;
+  --category-업무-bg: #e3f2fd;
+  --category-업무-text: #1565c0;
+  --category-개인-bg: #e8f5e9;
+  --category-개인-text: #2e7d32;
+  --category-공부-bg: #fff3e0;
+  --category-공부-text: #ef6c00;
+  --danger: #e53935;
+}
+
+[data-theme='dark'] {
+  --bg: #1a1a1a;
+  --card-bg: #2d2d2d;
+  --text: #e0e0e0;
+  --text-muted: #9a9a9a;
+  --border: #444444;
+  --tag-bg: #3a3a3a;
+  --tag-text: #cccccc;
+  --track: #444444;
+  --fill: #66bb6a;
+  --btn-bg: #3a3a3a;
+  --btn-border: #4d4d4d;
+  --input-border: #555555;
+  --category-업무-bg: rgba(33, 150, 243, 0.2);
+  --category-업무-text: #64b5f6;
+  --category-개인-bg: rgba(76, 175, 80, 0.2);
+  --category-개인-text: #81c784;
+  --category-공부-bg: rgba(255, 152, 0, 0.2);
+  --category-공부-text: #ffb74d;
+  --danger: #ef5350;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  transition: background-color 0.3s ease, max-width 0.2s ease;
+}
+
+/* 상단 영역 */
+.header {
+  margin-bottom: 24px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.app-title {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.remaining-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 11px;
+  background-color: var(--fill);
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* 다크모드 토글 스위치 */
+.theme-toggle {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.theme-toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.theme-toggle-slider {
+  position: absolute;
+  inset: 0;
+  background-color: var(--track);
+  border-radius: 999px;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-slider::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.theme-toggle-input:checked ~ .theme-toggle-slider {
+  background-color: #555;
+}
+
+.theme-toggle-input:checked ~ .theme-toggle-slider::before {
+  transform: translateX(24px);
+}
+
+.theme-toggle-input:focus-visible ~ .theme-toggle-slider {
+  outline: 2px solid var(--fill);
+  outline-offset: 2px;
+}
+
+.theme-toggle-icon {
+  position: relative;
+  font-size: 13px;
+  margin-left: 4px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.progress-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background-color: var(--track);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background-color: var(--fill);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.progress-text {
+  font-size: 14px;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+/* 사이드바 + 목록 레이아웃 (기본: 세로 스택) */
+.layout {
+  display: block;
+}
+
+.sidebar {
+  margin-bottom: 0;
+}
+
+/* 입력 영역 */
+.input-area {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.todo-input,
+.category-select,
+.search-input,
+.edit-title-input,
+.edit-category-select {
+  background-color: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 10px;
+}
+
+.category-select {
+  padding: 10px;
+}
+
+.add-btn {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+/* 검색 영역 */
+.search-area {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+}
+
+/* 필터 영역 */
+.filter-area {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.filter-btn,
+.add-btn,
+.edit-btn,
+.delete-btn,
+.save-btn,
+.cancel-btn,
+.clear-completed-btn {
+  background-color: var(--btn-bg);
+  color: var(--text);
+  border: 1px solid var(--btn-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.3s ease, border-color 0.3s ease,
+    transform 0.1s ease;
+}
+
+.filter-btn {
+  padding: 8px 12px;
+}
+
+.filter-btn:hover,
+.add-btn:hover,
+.edit-btn:hover,
+.save-btn:hover,
+.clear-completed-btn:hover,
+.cancel-btn:hover {
+  filter: brightness(0.95);
+}
+
+[data-theme='dark'] .filter-btn:hover,
+[data-theme='dark'] .add-btn:hover,
+[data-theme='dark'] .edit-btn:hover,
+[data-theme='dark'] .save-btn:hover,
+[data-theme='dark'] .clear-completed-btn:hover,
+[data-theme='dark'] .cancel-btn:hover {
+  filter: brightness(1.2);
+}
+
+.filter-btn:active,
+.add-btn:active,
+.edit-btn:active,
+.delete-btn:active,
+.save-btn:active,
+.cancel-btn:active,
+.clear-completed-btn:active {
+  transform: scale(0.96);
+}
+
+.filter-btn.active {
+  font-weight: bold;
+  background-color: var(--fill);
+  color: #fff;
+  border-color: var(--fill);
+}
+
+/* 도구 모음 */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.clear-completed-btn {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--danger);
+}
+
+.delete-btn {
+  color: var(--danger);
+}
+
+/* 목록 영역 */
+.list-area {
+  min-height: 200px;
+}
+
+.todo-list {
+  list-style: none;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.3s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.item-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.item-top-edit {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.item-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.todo-checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.todo-item.completed .todo-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.todo-title {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.category-tag {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background-color: var(--tag-bg);
+  color: var(--tag-text);
+  white-space: nowrap;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.category-tag.category-업무 {
+  background-color: var(--category-업무-bg);
+  color: var(--category-업무-text);
+}
+
+.category-tag.category-개인 {
+  background-color: var(--category-개인-bg);
+  color: var(--category-개인-text);
+}
+
+.category-tag.category-공부 {
+  background-color: var(--category-공부-bg);
+  color: var(--category-공부-text);
+}
+
+.edit-btn,
+.delete-btn,
+.save-btn,
+.cancel-btn {
+  padding: 6px 10px;
+}
+
+.edit-title-input {
+  flex: 1;
+  padding: 6px;
+}
+
+.edit-category-select {
+  padding: 6px;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.shake {
+  animation: shake 0.3s ease;
+  border-color: var(--danger) !important;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 40px 0;
+}
+
+/* 토스트 알림 */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(16px);
+  background-color: var(--text);
+  color: var(--card-bg);
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 100;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   데스크톱 (min-width: 900px): 전체 화면을 활용하는 대시보드 레이아웃
+   사이드바(입력/검색/필터/도구) + 목록 카드 그리드 2단 구성
+   ============================================================ */
+@media (min-width: 900px) {
+  body {
+    padding: 32px;
+  }
+
+  .app {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 40px 40px;
+  }
+
+  .app-title {
+    font-size: 28px;
+  }
+
+  .header-top {
+    margin-bottom: 16px;
+  }
+
+  .progress-bar {
+    height: 10px;
+  }
+
+  .layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .sidebar {
+    flex: 0 0 300px;
+    position: sticky;
+    top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .sidebar .input-area {
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+
+  .sidebar .search-area {
+    margin-bottom: 0;
+  }
+
+  .sidebar .filter-area {
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+
+  .sidebar .toolbar {
+    margin-bottom: 0;
+  }
+
+  .clear-completed-btn {
+    width: 100%;
+    padding: 10px 12px;
+  }
+
+  .list-area {
+    flex: 1;
+    min-width: 0;
+    min-height: 500px;
+  }
+
+  .todo-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    align-content: start;
+  }
+
+  .todo-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-radius: 10px;
+    background-color: var(--card-bg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .todo-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .item-top {
+    align-items: flex-start;
+  }
+
+  .todo-title {
+    font-size: 15px;
+  }
+
+  .item-actions {
+    justify-content: flex-end;
+  }
+
+  .todo-item.editing {
+    flex-direction: column;
+  }
+
+  .item-top-edit {
+    flex-direction: column;
+  }
+
+  .empty-message {
+    grid-column: 1 / -1;
+    padding: 80px 0;
+  }
+}
+
+/* ============================================================
+   모바일 (max-width: 480px): 세로 스택 + 터치 친화적 크기
+   ============================================================ */
+@media (max-width: 480px) {
+  .app {
+    max-width: 100%;
+    margin: 0;
+    padding: 16px;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .app-title {
+    font-size: 20px;
+  }
+
+  .theme-toggle {
+    width: 56px;
+    height: 30px;
+  }
+
+  .theme-toggle-slider::before {
+    width: 24px;
+    height: 24px;
+  }
+
+  .theme-toggle-input:checked ~ .theme-toggle-slider::before {
+    transform: translateX(26px);
+  }
+
+  .input-area {
+    flex-wrap: wrap;
+  }
+
+  .todo-input {
+    flex: 1 1 100%;
+  }
+
+  .category-select {
+    flex: 1;
+  }
+
+  .add-btn {
+    flex: 1;
+  }
+
+  .filter-area {
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .todo-item {
+    flex-wrap: wrap;
+  }
+
+  .item-top {
+    flex-wrap: wrap;
+  }
+
+  .todo-title {
+    flex: 1 1 100%;
+    order: 1;
+  }
+
+  .todo-checkbox {
+    order: 0;
+  }
+
+  .category-tag {
+    order: 2;
+  }
+
+  .item-top-edit {
+    flex-wrap: wrap;
+  }
+
+  .edit-title-input {
+    flex: 1 1 100%;
+  }
+
+  /* 터치 친화적인 버튼 크기 (최소 44px) */
+  .add-btn,
+  .filter-btn,
+  .edit-btn,
+  .delete-btn,
+  .save-btn,
+  .cancel-btn,
+  .clear-completed-btn,
+  .todo-input,
+  .category-select,
+  .search-input,
+  .edit-title-input,
+  .edit-category-select {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  .todo-checkbox {
+    width: 22px;
+    height: 22px;
+  }
+
+  .toolbar {
+    justify-content: stretch;
+  }
+
+  .clear-completed-btn {
+    width: 100%;
+  }
+}

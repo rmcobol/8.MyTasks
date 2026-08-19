@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>할 일 관리 앱</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <!-- 상단: 앱 제목 + 다크모드 토글 + 진행률 표시 영역 -->
+    <header class="header">
+      <div class="header-top">
+        <h1 class="app-title">
+          할 일 관리
+          <span class="remaining-badge" title="남은 할 일 개수">0</span>
+        </h1>
+        <label class="theme-toggle" title="다크 모드 전환 (Alt+D)">
+          <input type="checkbox" class="theme-toggle-input">
+          <span class="theme-toggle-slider" aria-hidden="true">
+            <span class="theme-toggle-icon">🌙</span>
+          </span>
+        </label>
+      </div>
+      <div class="progress-area">
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <span class="progress-text">0 / 0 완료</span>
+      </div>
+    </header>
+
+    <!-- 데스크톱: 사이드바 + 목록 2단 레이아웃 / 모바일: 세로 스택 -->
+    <div class="layout">
+      <aside class="sidebar">
+        <section class="input-area">
+          <input type="text" class="todo-input" placeholder="할 일을 입력하세요 (Alt+N)">
+          <select class="category-select">
+            <option value="업무">업무</option>
+            <option value="개인">개인</option>
+            <option value="공부">공부</option>
+          </select>
+          <button type="button" class="add-btn">추가</button>
+        </section>
+
+        <section class="search-area">
+          <input type="text" class="search-input" placeholder="🔍 할 일 검색">
+        </section>
+
+        <nav class="filter-area">
+          <button type="button" class="filter-btn active" data-filter="전체" title="Alt+1">전체</button>
+          <button type="button" class="filter-btn" data-filter="업무" title="Alt+2">업무</button>
+          <button type="button" class="filter-btn" data-filter="개인" title="Alt+3">개인</button>
+          <button type="button" class="filter-btn" data-filter="공부" title="Alt+4">공부</button>
+        </nav>
+
+        <div class="toolbar">
+          <button type="button" class="clear-completed-btn">완료된 항목 모두 삭제</button>
+        </div>
+      </aside>
+
+      <main class="list-area">
+        <ul class="todo-list"></ul>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

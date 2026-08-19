@@ -8,9 +8,20 @@
 </head>
 <body>
   <div class="app">
-    <!-- 1. 상단: 앱 제목 + 진행률 표시 영역 -->
+    <!-- 1. 상단: 앱 제목 + 다크모드 토글 + 진행률 표시 영역 -->
     <header class="header">
-      <h1 class="app-title">할 일 관리</h1>
+      <div class="header-top">
+        <h1 class="app-title">
+          할 일 관리
+          <span class="remaining-badge" title="남은 할 일 개수">0</span>
+        </h1>
+        <label class="theme-toggle" title="다크 모드 전환 (Alt+D)">
+          <input type="checkbox" class="theme-toggle-input">
+          <span class="theme-toggle-slider" aria-hidden="true">
+            <span class="theme-toggle-icon">🌙</span>
+          </span>
+        </label>
+      </div>
       <div class="progress-area">
         <div class="progress-bar">
           <div class="progress-fill"></div>
@@ -21,7 +32,7 @@
 
     <!-- 2. 입력 영역 -->
     <section class="input-area">
-      <input type="text" class="todo-input" placeholder="할 일을 입력하세요">
+      <input type="text" class="todo-input" placeholder="할 일을 입력하세요 (Alt+N)">
       <select class="category-select">
         <option value="업무">업무</option>
         <option value="개인">개인</option>
@@ -30,19 +41,31 @@
       <button type="button" class="add-btn">추가</button>
     </section>
 
+    <!-- 2-1. 검색 영역 -->
+    <section class="search-area">
+      <input type="text" class="search-input" placeholder="🔍 할 일 검색">
+    </section>
+
     <!-- 3. 필터 영역 -->
     <nav class="filter-area">
-      <button type="button" class="filter-btn active" data-filter="전체">전체</button>
-      <button type="button" class="filter-btn" data-filter="업무">업무</button>
-      <button type="button" class="filter-btn" data-filter="개인">개인</button>
-      <button type="button" class="filter-btn" data-filter="공부">공부</button>
+      <button type="button" class="filter-btn active" data-filter="전체" title="Alt+1">전체</button>
+      <button type="button" class="filter-btn" data-filter="업무" title="Alt+2">업무</button>
+      <button type="button" class="filter-btn" data-filter="개인" title="Alt+3">개인</button>
+      <button type="button" class="filter-btn" data-filter="공부" title="Alt+4">공부</button>
     </nav>
+
+    <!-- 3-1. 도구 모음 -->
+    <div class="toolbar">
+      <button type="button" class="clear-completed-btn">완료된 항목 모두 삭제</button>
+    </div>
 
     <!-- 4. 목록 영역 -->
     <main class="list-area">
       <ul class="todo-list"></ul>
     </main>
   </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
 
   <script src="script.js"></script>
 </body>

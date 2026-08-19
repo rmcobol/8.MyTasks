@@ -98,3 +98,55 @@ body {
 .todo-list {
   list-style: none;
 }
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.todo-item.completed .todo-title {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.todo-title {
+  flex: 1;
+}
+
+.category-tag {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background-color: #e0e0e0;
+  color: #555;
+}
+
+.edit-btn,
+.delete-btn,
+.save-btn,
+.cancel-btn {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.todo-item.editing {
+  gap: 8px;
+}
+
+.edit-title-input {
+  flex: 1;
+  padding: 6px;
+}
+
+.edit-category-select {
+  padding: 6px;
+}
+
+.empty-message {
+  text-align: center;
+  color: #999;
+  padding: 40px 0;
+}

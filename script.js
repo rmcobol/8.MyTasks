@@ -59,25 +59,139 @@ function toggleComplete(id) {
   return todos[index];
 }
 
-// ===== 콘솔 테스트 =====
+// ===== 렌더 레이어 =====
 
-(function testDataLayer() {
-  localStorage.removeItem(STORAGE_KEY);
+let todos = [];
+let editingId = null;
 
-  console.log('1) 초기 로드 (빈 배열이어야 함):', loadTodos());
+const todoListEl = document.querySelector('.todo-list');
+const todoInputEl = document.querySelector('.todo-input');
+const categorySelectEl = document.querySelector('.category-select');
+const addBtnEl = document.querySelector('.add-btn');
 
-  const t1 = addTodo('장보기', '개인');
-  console.log('2) addTodo 후:', loadTodos());
+function render() {
+  todos = loadTodos();
+  todoListEl.innerHTML = '';
 
-  const t2 = addTodo('보고서 작성', '업무');
-  console.log('3) addTodo 두번째 후:', loadTodos());
+  if (todos.length === 0) {
+    const emptyEl = document.createElement('li');
+    emptyEl.className = 'empty-message';
+    emptyEl.textContent = '할 일이 없습니다';
+    todoListEl.appendChild(emptyEl);
+    return;
+  }
 
-  updateTodo(t1.id, { title: '장보기 (수정됨)' });
-  console.log('4) updateTodo 후:', loadTodos());
+  todos.forEach((todo) => {
+    const itemEl =
+      todo.id === editingId ? createEditItem(todo) : createTodoItem(todo);
+    todoListEl.appendChild(itemEl);
+  });
+}
 
-  toggleComplete(t2.id);
-  console.log('5) toggleComplete 후:', loadTodos());
+function createTodoItem(todo) {
+  const li = document.createElement('li');
+  li.className = 'todo-item' + (todo.completed ? ' completed' : '');
+  li.dataset.id = todo.id;
 
-  deleteTodo(t1.id);
-  console.log('6) deleteTodo 후:', loadTodos());
-})();
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.className = 'todo-checkbox';
+  checkbox.checked = todo.completed;
+  checkbox.addEventListener('change', () => {
+    toggleComplete(todo.id);
+    render();
+  });
+
+  const title = document.createElement('span');
+  title.className = 'todo-title';
+  title.textContent = todo.title;
+
+  const category = document.createElement('span');
+  category.className = 'category-tag';
+  category.textContent = todo.category;
+
+  const editBtn = document.createElement('button');
+  editBtn.type = 'button';
+  editBtn.className = 'edit-btn';
+  editBtn.textContent = '수정';
+  editBtn.addEventListener('click', () => {
+    editingId = todo.id;
+    render();
+  });
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.type = 'button';
+  deleteBtn.className = 'delete-btn';
+  deleteBtn.textContent = '삭제';
+  deleteBtn.addEventListener('click', () => {
+    deleteTodo(todo.id);
+    render();
+  });
+
+  li.append(checkbox, title, category, editBtn, deleteBtn);
+  return li;
+}
+
+function createEditItem(todo) {
+  const li = document.createElement('li');
+  li.className = 'todo-item editing';
+  li.dataset.id = todo.id;
+
+  const titleInput = document.createElement('input');
+  titleInput.type = 'text';
+  titleInput.className = 'edit-title-input';
+  titleInput.value = todo.title;
+
+  const categorySelect = document.createElement('select');
+  categorySelect.className = 'edit-category-select';
+  ['업무', '개인', '공부'].forEach((cat) => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    if (cat === todo.category) option.selected = true;
+    categorySelect.appendChild(option);
+  });
+
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'save-btn';
+  saveBtn.textContent = '저장';
+  saveBtn.addEventListener('click', () => {
+    const newTitle = titleInput.value.trim();
+    if (!newTitle) return;
+    updateTodo(todo.id, {
+      title: newTitle,
+      category: categorySelect.value,
+    });
+    editingId = null;
+    render();
+  });
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.className = 'cancel-btn';
+  cancelBtn.textContent = '취소';
+  cancelBtn.addEventListener('click', () => {
+    editingId = null;
+    render();
+  });
+
+  li.append(titleInput, categorySelect, saveBtn, cancelBtn);
+  return li;
+}
+
+function handleAddTodo() {
+  const title = todoInputEl.value.trim();
+  if (!title) return;
+  const category = categorySelectEl.value;
+  addTodo(title, category);
+  todoInputEl.value = '';
+  render();
+}
+
+addBtnEl.addEventListener('click', handleAddTodo);
+todoInputEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleAddTodo();
+});
+
+render();
